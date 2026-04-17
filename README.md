@@ -8,7 +8,7 @@ Cada rama contiene el estado del proyecto al finalizar esa clase.
 | Sesión | Tema | Rama | Guía |
 |--------|------|------|------|
 | 01 | CRUD en memoria | `sesion-01` | [ver guía](docs/sesion-01.md) |
-| 02 | EF Core + Scalar | `sesion-02` | proximamente |
+| 02 | EF Core + Scalar | `sesion-02` | [ver guía](docs/sesion-02.md) |
 
 ## Cómo usar este repositorio
 
