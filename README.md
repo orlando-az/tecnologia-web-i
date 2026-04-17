@@ -12,6 +12,11 @@ Cada rama contiene el estado del proyecto al finalizar esa clase.
 
 ## Cómo usar este repositorio
 
-Para ver el código de una sesión específica:
+1. Clonar el repositorio:
 
-    git checkout sesion-01
+       git clone https://github.com/tu-usuario/tecnologia-web-i.git
+
+2. Para ver el código de una sesión específica:
+
+       git checkout sesion-01
+       git checkout sesion-02
