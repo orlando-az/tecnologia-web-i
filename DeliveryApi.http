@@ -1,0 +1,36 @@
+@DeliveryApi_HostAddress = http://localhost:5230
+###Ver todos los productos
+GET {{DeliveryApi_HostAddress}}/api/products
+Accept: application/json
+
+###Listar unico producto
+GET {{DeliveryApi_HostAddress}}/api/products/2
+Accept: application/json
+
+###Crear Producto
+POST {{DeliveryApi_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "Name":"Cafe",
+    "Description":"Cafe con leche",
+    "Category":"Cafe",
+    "Price":20,
+    "IsAvailable":true
+}
+
+###Actualizar Producto
+PUT {{DeliveryApi_HostAddress}}/api/products/5
+Content-Type: application/json
+
+{
+    "Name":"Cerveza",
+    "Description":"Cerveza litro",
+    "Category":"Cerveza",
+    "Price":25,
+    "IsAvailable":true
+}
+
+###Eliminar Producto
+DELETE {{DeliveryApi_HostAddress}}/api/products/5
+Accept: application/json
