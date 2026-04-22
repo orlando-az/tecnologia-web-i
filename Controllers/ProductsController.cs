@@ -1,6 +1,8 @@
+using DeliveryApi.Data;
 using DeliveryApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApi.Controllers
 {
@@ -8,37 +10,33 @@ namespace DeliveryApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private static List<Product> _products = new List<Product>
+
+        private readonly AppDbContext _context;
+        public ProductsController(AppDbContext context)
         {
-            new Product {Id=1, Name="Pizza", Description="Pizza Familiar", 
-            Category="Pizza", Price=80.5m ,IsAvailable=true},
-            new Product {Id=2, Name="Hamburguesa", Description="Hamburguesa Especial", 
-            Category="Hamburguesa", Price=40.5m ,IsAvailable=true},
-            new Product {Id=3, Name="Pollo", Description="Pollo a la canasta", 
-            Category="Pollo", Price=20m ,IsAvailable=true},
-            new Product {Id=4, Name="Coca-Cola", Description="Coca-Cola 500ml", 
-            Category="Bebida", Price=6m ,IsAvailable=true}
-        };
+            _context=context;
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetAll()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
         {
-            return Ok(_products);
+            var products = await _context.Products.ToListAsync();
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Product> GetById(int id)
+        public async Task<ActionResult<Product>> GetById(int id)
         {
-            var product = _products.FirstOrDefault(p=> p.Id==id);
+            var product = await _context.Products.FirstOrDefaultAsync(p=> p.Id==id);
             if(product is null)
                 return NotFound();
             return Ok(product);
         }
 
         [HttpPost]
-        public ActionResult<Product> Create([FromBody] Product product)
+        public async Task<ActionResult<Product>> Create([FromBody] Product product)
         {
-            product.Id = _products.Any() ? _products.Max(p=>p.Id)+1 : 1;
+           // product.Id = _products.Any() ? _products.Max(p=>p.Id)+1 : 1;
 
             if (String.IsNullOrEmpty(product.Name))
                 return BadRequest("El nombre de producto no puede estar vacio");
@@ -46,15 +44,16 @@ namespace DeliveryApi.Controllers
             if(String.IsNullOrEmpty(product.Category))
                 return BadRequest("La categoria no puede estar vacia");
 
-            _products.Add(product);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
             //return Ok(product);
             return CreatedAtAction(nameof(GetById),new {id=product.Id},product);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Product> Update(int id, Product updateProduct)
+        public async Task<ActionResult<Product>> Update(int id, Product updateProduct)
         {
-            var product = _products.FirstOrDefault(p=> p.Id==id);
+            var product = await _context.Products.FirstOrDefaultAsync(p=> p.Id==id);
 
             if(product is null)
                 return NotFound();
@@ -70,17 +69,20 @@ namespace DeliveryApi.Controllers
             product.Description= updateProduct.Description;
             product.Price= updateProduct.Price;
 
+            await _context.SaveChangesAsync();
+
             return Ok(product);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = _products.FirstOrDefault(p=>p.Id==id);
+            var product = await _context.Products.FirstOrDefaultAsync(p=>p.Id==id);
             if(product is null)
                 return NotFound();
             
-            _products.Remove(product);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }
