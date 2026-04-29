@@ -24,5 +24,12 @@
     <Folder Include="Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
-  
+
+ <ItemGroup>
+  <None Update="delivery.db">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </None>
+</ItemGroup>
+
 </Project>
